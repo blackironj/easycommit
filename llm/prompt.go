@@ -12,15 +12,16 @@ const (
 Provide a super concise one sentence overall changes summary of the following "git diff" output following strictly the next rules:
 - Do not use any code snippets, imports, file routes or bullets points.
 - Do not mention the route of file that has been changes.
+- Do not mention anything related to dependencies.
 - Simply describe the MAIN GOAL of the changes.
 - Output directly the summary in plain text.`
 
 	_defaultCommitMsgPrompt = `Your only goal is to retrieve a single commit message.
 Based on the following changes, combine them in ONE SINGLE commit message retrieving the global idea, following strictly the next rules:
 - Always use the next format: "{type}: {commit_message}" where "{type}" is one of "feat", "fix", "docs", "style", "refactor", "test", "chore", "revert".
-- Do not mention the route of files or name of files.
+- Do not mention the route of files, name of files or imports path.
 - Output directly only one commit message in plain text.
-- Be as concise as possible. 40 characters max.
+- Be as concise as possible. 72 characters max.
 - Do not add only issues numeration nor explain your output.`
 )
 

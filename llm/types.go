@@ -6,6 +6,13 @@ const (
 	Mistral LLMmodel = "mistral"
 )
 
+const (
+	DefaultOllamaEndpoint = "http://127.0.0.1:11434"
+
+	DefaultTemperature = 0.7
+	DefaultNumPredict  = 200
+)
+
 type OllamaOptions struct {
 	NumPredict  int     `json:"num_predict"`
 	Temperature float64 `json:"temperature"`
