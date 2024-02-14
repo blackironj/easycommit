@@ -1,7 +1,9 @@
 package cmd
 
 import (
+	"fmt"
 	"os/exec"
+	"strings"
 
 	"github.com/spf13/cobra"
 
@@ -27,11 +29,21 @@ var RootCmd = &cobra.Command{
 		prompter := llm.NewPrompter(endpoint, llm.LLMmodel(llmModel), llmTemperature, llmNumPredict)
 		summary := prompter.GetSummary(string(diff), "")
 
-		commit := prompter.GetCommitMsg(summary, "")
+		rawCommits := prompter.GetCommitMsg(summary, "")
 
-		if err := exec.Command("git", "commit", "-m", commit).Run(); err != nil {
-			panic(err)
+		rawCommits = strings.Replace(rawCommits, "\n\n", "\n", -1)
+		commits := strings.Split(rawCommits, "\n")
+
+		//for debugging
+		fmt.Println("Length : ", len(commits))
+		fmt.Println("Generated commits:")
+		for _, commit := range commits {
+			fmt.Println(commit)
 		}
+
+		// if err := exec.Command("git", "commit", "-m", commit).Run(); err != nil {
+		// 	panic(err)
+		// }
 	},
 }
 

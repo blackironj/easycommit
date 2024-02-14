@@ -16,11 +16,12 @@ Provide a super concise one sentence overall changes summary of the following "g
 - Simply describe the MAIN GOAL of the changes.
 - Output directly the summary in plain text.`
 
-	_defaultCommitMsgPrompt = `Your only goal is to recommend a list of at least 3 commit messages to the user.
+	_defaultCommitMsgPrompt = `You must recommend a list of at least three commit messages to the user.
 Based on the following changes, combine them in ONE SINGLE commit message retrieving the global idea, following strictly the next rules:
 - Always use the next format: "{type}: {commit_message}" where "{type}" is one of "feat", "fix", "docs", "style", "refactor", "test", "chore", "revert".
 - Do not mention the route of files, name of files or imports path.
-- Output directly only one commit message in plain text.
+- Output directly commit messages line by line in plain text.
+- No need numbers, bullet points, quote and double quote.
 - Be as concise as possible. 72 characters max.
 - Do not add only issues numeration nor explain your output.`
 )
