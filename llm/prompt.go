@@ -16,7 +16,7 @@ Provide a super concise one sentence overall changes summary of the following "g
 - Simply describe the MAIN GOAL of the changes.
 - Output directly the summary in plain text.`
 
-	_defaultCommitMsgPrompt = `Your only goal is to retrieve a single commit message.
+	_defaultCommitMsgPrompt = `Your only goal is to recommend a list of at least 3 commit messages to the user.
 Based on the following changes, combine them in ONE SINGLE commit message retrieving the global idea, following strictly the next rules:
 - Always use the next format: "{type}: {commit_message}" where "{type}" is one of "feat", "fix", "docs", "style", "refactor", "test", "chore", "revert".
 - Do not mention the route of files, name of files or imports path.
