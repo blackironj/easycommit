@@ -50,7 +50,14 @@ var RootCmd = &cobra.Command{
 			spinningProg.Send(ui.JobCompletionCmd{})
 		}()
 
-		ui.RunSpinning(spinningProg)
+		switch ui.RunSpinning(spinningProg) {
+		case ui.UserCancel:
+			fmt.Println("❌ user cancel")
+			return
+		case ui.Crashed:
+			fmt.Println("😔 crashed")
+			return
+		}
 
 		interactionProg := ui.NewInteractionProgram(resultCommits)
 		selectedCommit := ui.RunInteraction(interactionProg)
