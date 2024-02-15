@@ -70,7 +70,7 @@ func (m interactionModel) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 
 func (m interactionModel) View() string {
 	s := strings.Builder{}
-	s.WriteString("Which commit would you like?\n\n")
+	s.WriteString("* Which commit would you like? *\n\n")
 
 	for i := 0; i < len(m.choiceList); i++ {
 		if m.cursor == i {
