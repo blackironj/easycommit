@@ -61,11 +61,9 @@ func (m spinningModel) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 }
 
 func (m spinningModel) View() string {
-	msg := "Generating..."
-
-	str := fmt.Sprintf("\n%s %s\n\n", m.spinner.View(), msg)
+	str := fmt.Sprintf("\n%s Generating...\n\n", m.spinner.View())
 	if m.status == Finished {
-		return str + "\n Finished ! \n\n"
+		return str + "\n✅ Job finished! \n\n"
 	}
 	return str
 }

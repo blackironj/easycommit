@@ -27,7 +27,7 @@ var RootCmd = &cobra.Command{
 
 		diff, err := exec.Command("git", "diff", "--cached", "--diff-algorithm=minimal").Output()
 		if err != nil {
-			fmt.Println("git diff failed")
+			fmt.Println("😔 git diff failed")
 			l.Err(err).Send()
 			return
 		}
@@ -57,15 +57,16 @@ var RootCmd = &cobra.Command{
 
 		l.Debug().Strs("recommended", resultCommits).Str("selected", selectedCommit).Send()
 		if selectedCommit == "" {
-			fmt.Println("user cancel")
+			fmt.Println("❌ user cancel")
 			return
 		}
 
 		if err := exec.Command("git", "commit", "-m", selectedCommit).Run(); err != nil {
-			fmt.Println("commit failed")
+			fmt.Println("😔 commit failed")
 			l.Err(err).Send()
 			return
 		}
+		fmt.Println("😃 commit success!")
 	},
 }
 
