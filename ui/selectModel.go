@@ -1,7 +1,7 @@
 package ui
 
 import (
-	"strings"
+	"fmt"
 
 	tea "github.com/charmbracelet/bubbletea"
 
@@ -69,19 +69,25 @@ func (m interactionModel) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 }
 
 func (m interactionModel) View() string {
-	s := strings.Builder{}
-	s.WriteString("* Which commit would you like? *\n\n")
+	return choicesView(m)
+}
 
-	for i := 0; i < len(m.choiceList); i++ {
-		if m.cursor == i {
-			s.WriteString("[x] ")
-		} else {
-			s.WriteString("[ ] ")
-		}
-		s.WriteString(m.choiceList[i])
-		s.WriteString("\n")
+func choicesView(m interactionModel) string {
+	selected := m.cursor
+	tpl := "* Which commit would you like? *\n\n"
+	tpl += "%s\n"
+	tpl += subtle("up/down: select") + dotStr + subtle("enter: choose") + dotStr + subtle("ctrl+c, q, esc: quit")
+
+	var choices string
+	for i, elem := range m.choiceList {
+		choices += checkbox(elem, selected == i) + "\n"
 	}
-	s.WriteString("\n(press q to quit)\n")
+	return fmt.Sprintf(tpl, choices)
+}
 
-	return s.String()
+func checkbox(label string, checked bool) string {
+	if checked {
+		return colorFg("[x] "+label, "212")
+	}
+	return "[ ] " + label
 }
