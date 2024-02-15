@@ -4,36 +4,36 @@ import (
 	"strings"
 
 	tea "github.com/charmbracelet/bubbletea"
+
+	"github.com/blackironj/easycommit/utils/logger"
 )
-
-func RunInteractionModel(choiceList []string) string {
-	model := newInteractionModel(choiceList)
-	p := tea.NewProgram(model)
-
-	m, err := p.Run()
-	if err != nil {
-		panic(err)
-	}
-
-	finishedModel, ok := m.(interactionModel)
-	if ok && finishedModel.selected != "" {
-		return finishedModel.selected
-	}
-	return ""
-}
-
-func newInteractionModel(choiceList []string) *interactionModel {
-	return &interactionModel{
-		cursor:     0,
-		selected:   "",
-		choiceList: choiceList,
-	}
-}
 
 type interactionModel struct {
 	cursor     int
 	selected   string
 	choiceList []string
+}
+
+func NewInteractionProgram(choiceList []string) *tea.Program {
+	return tea.NewProgram(interactionModel{
+		cursor:     0,
+		selected:   "",
+		choiceList: choiceList,
+	})
+}
+
+func RunInteraction(prog *tea.Program) string {
+	resModel, err := prog.Run()
+	if err != nil {
+		logger.Get().Err(err)
+		return ""
+	}
+
+	finishedModel, ok := resModel.(interactionModel)
+	if ok && finishedModel.selected != "" {
+		return finishedModel.selected
+	}
+	return ""
 }
 
 func (m interactionModel) Init() tea.Cmd {
