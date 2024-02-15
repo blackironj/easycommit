@@ -32,19 +32,30 @@ var RootCmd = &cobra.Command{
 			return
 		}
 
-		prompter := llm.NewPrompter(endpoint, llm.LLMmodel(llmModel), llmTemperature, llmNumPredict)
-		summary := prompter.GetSummary(string(diff), "")
+		var summary string
+		var prompter llm.Prompter
+		var resultCommits []string
 
-		rawCommits := prompter.GetCommitMsg(summary, "")
-		rawCommits = strings.Replace(rawCommits, "\n\n", "\n", -1)
-		commits := strings.Split(rawCommits, "\n")
-		for i := range commits {
-			commits[i] = strings.Trim(commits[i], "\"")
-		}
+		spinningProg := ui.NewSpinningProgram()
+		go func() {
+			prompter = llm.NewPrompter(endpoint, llm.LLMmodel(llmModel), llmTemperature, llmNumPredict)
+			summary = prompter.GetSummary(string(diff), "")
+			rawCommits := prompter.GetCommitMsg(summary, "")
 
-		selectedCommit := ui.RunInteractionModel(commits)
+			rawCommits = strings.Replace(rawCommits, "\n\n", "\n", -1)
+			resultCommits = strings.Split(rawCommits, "\n")
+			for i := range resultCommits {
+				resultCommits[i] = strings.Trim(resultCommits[i], "\"")
+			}
+			spinningProg.Send(ui.JobCompletionCmd{})
+		}()
 
-		l.Debug().Strs("recommended", commits).Str("selected", selectedCommit).Send()
+		ui.RunSpinning(spinningProg)
+
+		interactionProg := ui.NewInteractionProgram(resultCommits)
+		selectedCommit := ui.RunInteraction(interactionProg)
+
+		l.Debug().Strs("recommended", resultCommits).Str("selected", selectedCommit).Send()
 		if selectedCommit == "" {
 			fmt.Println("user cancel")
 			return
