@@ -51,8 +51,8 @@ var RootCmd = &cobra.Command{
 		}
 
 		if err := exec.Command("git", "commit", "-m", selectedCommit).Run(); err != nil {
-			logger.Get().Err(err).Send()
 			fmt.Println("commit failed")
+			l.Err(err).Send()
 			return
 		}
 	},
