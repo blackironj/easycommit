@@ -8,6 +8,7 @@ import (
 	"github.com/spf13/cobra"
 
 	"github.com/blackironj/easycommit/llm"
+	"github.com/blackironj/easycommit/ui"
 )
 
 var (
@@ -34,16 +35,18 @@ var RootCmd = &cobra.Command{
 		rawCommits = strings.Replace(rawCommits, "\n\n", "\n", -1)
 		commits := strings.Split(rawCommits, "\n")
 
+		selectedCommit := ui.RunInteractionModel(commits)
+
 		//for debugging
-		fmt.Println("Length : ", len(commits))
-		fmt.Println("Generated commits:")
-		for _, commit := range commits {
-			fmt.Println(commit)
+		fmt.Println("user choose : ", selectedCommit)
+		if selectedCommit == "" {
+			fmt.Println("user cancel")
+			return
 		}
 
-		// if err := exec.Command("git", "commit", "-m", commit).Run(); err != nil {
-		// 	panic(err)
-		// }
+		if err := exec.Command("git", "commit", "-m", selectedCommit).Run(); err != nil {
+			panic(err)
+		}
 	},
 }
 
