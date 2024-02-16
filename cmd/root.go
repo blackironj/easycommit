@@ -32,6 +32,11 @@ var RootCmd = &cobra.Command{
 			return
 		}
 
+		if string(diff) == "" {
+			fmt.Println("😔 no diff")
+			return
+		}
+
 		var summary string
 		var prompter llm.Prompter
 		var resultCommits []string
