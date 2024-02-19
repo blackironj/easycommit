@@ -14,8 +14,8 @@ const (
 )
 
 type OllamaOptions struct {
-	NumPredict  int     `json:"num_predict"`
-	Temperature float64 `json:"temperature"`
+	NumPredict  *int64   `json:"num_predict,omitempty"`
+	Temperature *float64 `json:"temperature,omitempty"`
 }
 
 type OllamaParams struct {

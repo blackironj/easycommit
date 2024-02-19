@@ -16,7 +16,7 @@ var (
 	endpoint       string
 	llmModel       string
 	llmTemperature float64
-	llmNumPredict  int
+	llmNumPredict  int64
 )
 
 var RootCmd = &cobra.Command{
@@ -43,7 +43,12 @@ var RootCmd = &cobra.Command{
 
 		spinningProg := ui.NewSpinningProgram()
 		go func() {
-			prompter = llm.NewPrompter(endpoint, llm.LLMmodel(llmModel), llmTemperature, llmNumPredict)
+			prompter = llm.NewPrompter(endpoint,
+				llm.LLMmodel(llmModel),
+				llm.OllamaOptions{
+					Temperature: &llmTemperature,
+					NumPredict:  &llmNumPredict,
+				})
 			summary = prompter.GetSummary(string(diff), "")
 			rawCommits := prompter.GetCommitMsg(summary, "")
 
@@ -86,7 +91,7 @@ func SetGlobalFlag() {
 	RootCmd.PersistentFlags().StringVarP(&endpoint, "endpoint", "e", llm.DefaultOllamaEndpoint, "ollama host url")
 	RootCmd.PersistentFlags().StringVarP(&llmModel, "model", "m", string(llm.Mistral), "llama model")
 	RootCmd.PersistentFlags().Float64VarP(&llmTemperature, "temperature", "t", llm.DefaultTemperature, "temperature")
-	RootCmd.PersistentFlags().IntVarP(&llmNumPredict, "num-predict", "n", llm.DefaultNumPredict, "num predict")
+	RootCmd.PersistentFlags().Int64VarP(&llmNumPredict, "num-predict", "n", llm.DefaultNumPredict, "num predict")
 
 	RootCmd.PersistentFlags().BoolVarP(&logger.DebugFlag, "debug", "d", false, "for debugging log")
 }

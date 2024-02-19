@@ -27,19 +27,20 @@ Based on the following changes, combine them in ONE SINGLE commit message retrie
 )
 
 type Prompter struct {
-	Endpoint    string
-	Model       LLMmodel
-	Temperature float64
-	NumPredict  int
+	Endpoint string
+	Model    LLMmodel
+	Opt      OllamaOptions
 }
 
-func NewPrompter(endpoint string, model LLMmodel, temperature float64, numPredict int) Prompter {
-	return Prompter{
-		Endpoint:    endpoint,
-		Model:       model,
-		Temperature: temperature,
-		NumPredict:  numPredict,
+func NewPrompter(endpoint string, model LLMmodel, opt ...OllamaOptions) Prompter {
+	prompter := Prompter{
+		Endpoint: endpoint,
+		Model:    model,
 	}
+	if len(opt) > 0 {
+		prompter.Opt = opt[0]
+	}
+	return prompter
 }
 
 func (p Prompter) getTokenFromOllama(prompt string) string {
@@ -48,13 +49,10 @@ func (p Prompter) getTokenFromOllama(prompt string) string {
 	})
 
 	BodyParam := OllamaParams{
-		Model:  p.Model,
-		Prompt: prompt,
-		Stream: false,
-		Options: OllamaOptions{
-			NumPredict:  p.NumPredict,
-			Temperature: p.Temperature,
-		},
+		Model:   p.Model,
+		Prompt:  prompt,
+		Stream:  false,
+		Options: p.Opt,
 	}
 
 	var token OllamaToken
