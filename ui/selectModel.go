@@ -8,39 +8,39 @@ import (
 	"github.com/blackironj/easycommit/utils/logger"
 )
 
-type interactionModel struct {
+type msgChoiceModel struct {
 	cursor     int
 	selected   string
 	choiceList []string
 }
 
-func NewInteractionProgram(choiceList []string) *tea.Program {
-	return tea.NewProgram(interactionModel{
+func NewMsgChoiceProgram(choiceList []string) *tea.Program {
+	return tea.NewProgram(msgChoiceModel{
 		cursor:     0,
 		selected:   "",
 		choiceList: choiceList,
 	})
 }
 
-func RunInteraction(prog *tea.Program) string {
+func RunMsgChoice(prog *tea.Program) string {
 	resModel, err := prog.Run()
 	if err != nil {
 		logger.Get().Err(err)
 		return ""
 	}
 
-	finishedModel, ok := resModel.(interactionModel)
+	finishedModel, ok := resModel.(msgChoiceModel)
 	if ok && finishedModel.selected != "" {
 		return finishedModel.selected
 	}
 	return ""
 }
 
-func (m interactionModel) Init() tea.Cmd {
+func (m msgChoiceModel) Init() tea.Cmd {
 	return nil
 }
 
-func (m interactionModel) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
+func (m msgChoiceModel) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 	switch msg := msg.(type) {
 	case tea.KeyMsg:
 		switch msg.String() {
@@ -68,11 +68,11 @@ func (m interactionModel) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 	return m, nil
 }
 
-func (m interactionModel) View() string {
+func (m msgChoiceModel) View() string {
 	return choicesView(m)
 }
 
-func choicesView(m interactionModel) string {
+func choicesView(m msgChoiceModel) string {
 	selected := m.cursor
 	tpl := "* Which commit would you like? *\n\n"
 	tpl += "%s\n"

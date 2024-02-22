@@ -69,8 +69,8 @@ var RootCmd = &cobra.Command{
 			return
 		}
 
-		interactionProg := ui.NewInteractionProgram(resultCommits)
-		selectedCommit := ui.RunInteraction(interactionProg)
+		interactionProg := ui.NewMsgChoiceProgram(resultCommits)
+		selectedCommit := ui.RunMsgChoice(interactionProg)
 
 		l.Debug().Strs("recommended", resultCommits).Str("selected", selectedCommit).Send()
 		if selectedCommit == "" {
