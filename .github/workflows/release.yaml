@@ -24,6 +24,7 @@ jobs:
         github_token: ${{ secrets.GH_TOKEN }}
         goos: ${{ matrix.goos }}
         goarch: ${{ matrix.goarch }}
+        goversion: 1.22
         md5sum: false
         pre_command: export CGO_ENABLED=0 && export GO111MODUL=on
         build_flags: -a
